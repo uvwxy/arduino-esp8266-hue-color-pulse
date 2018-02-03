@@ -1,10 +1,8 @@
 #include <Arduino.h>
 #include <BuildInfo.h>
 
-void setup(void) {
-  // TODO
-}
+#include "config.h"
 
-void loop(void) {
-  // TODO
-}
+void setup() { Serial.begin(115200); }
+
+void loop(void) {}

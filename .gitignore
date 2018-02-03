@@ -4,3 +4,4 @@
 .vscode/launch.json
 .vscode/
 src/GeneratedBuildInfo.h
+src/config.h

@@ -1,0 +1,5 @@
+#define HUE_USER "xZXN4garblgarblgarblPcyxpv5yvtgf"
+#define HUE_LIGHT 6
+#define HUE_BRIDGE "hostnameOfMyHueBridge"
+#define WIFI_SSID "MyWifi"
+#define WIFI_PASS "MyWifiPassword"
