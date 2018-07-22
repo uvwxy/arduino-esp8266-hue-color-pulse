@@ -46,7 +46,10 @@ void loop(void) {
   digitalWrite(D4, LOW);
 
   // hue pulse
-  sendHSB(true, 255 * diff, 195 + ((smallDiff % 20) * 3), 0.8 * 255, HUE_LIGHT,
+  sendHSB(true,
+          255 * diff,                   //
+          195 + ((smallDiff % 20) * 3), //
+          0.8 * 255, HUE_LIGHT,         //
           HUE_BRIDGE, HUE_API_KEY);
 
   digitalWrite(D4, HIGH);

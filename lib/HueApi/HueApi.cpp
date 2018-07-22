@@ -12,8 +12,14 @@ void sendBody(String body, uint8_t light, String hueBridge, String hueApiKey) {
         "PUT /api/" + hueApiKey + "/lights/" + String(light) + "/state";
     client.print(path);
     client.println(" HTTP/1.1");
-    client.println("Cache-Control: no-cache");
+
+    // this is required otherwise we get a "400 Bad Request"
+    client.print ("Host: ");
+    client.println(hueBridge);
+
+    client.println("Accept: application/json");
     client.println("Content-Type: application/json");
+
     client.print("Content-Length: ");
     client.println(body.length());
     client.println();
@@ -46,11 +52,17 @@ void sendBody(String body, uint8_t light, String hueBridge, String hueApiKey) {
 
 void sendHSB(bool on, uint16_t hue, uint8_t sat, uint8_t bri, uint8_t light,
              String hueBridge, String hueApiKey) {
-  String body = String("{\"on\": ") + (on ? "true" : "false") +
-                ", \"hue\": " + String(hue) + ", \"bri\": " + String(bri) +
-                ", \"sat\": " + String(sat) + "}";
-
-  Serial.println("H" + String(hue) + " S" + String(sat) + " B" + String(bri));
+  String body = String("{")                            //
+                + "\"on\": " + (on ? "true" : "false") //
+                + ", \"hue\": " + String(hue)          //
+                + ", \"bri\": " + String(bri)          //
+                + ", \"sat\": " + String(sat)          //
+                + ", \"effect\": \"none\""             //
+                + "}";
+  if (DEBUG) {
+    Serial.println("H" + String(hue) + " S" + String(sat) + " B" + String(bri));
+    Serial.println(body);
+  }
   sendBody(body, light, hueBridge, hueApiKey);
 }
 
@@ -60,11 +72,18 @@ void sendRGBSB(bool on, uint8_t r, uint8_t g, uint8_t b, uint8_t sat,
   conv.rgbToHsl((byte)r, (byte)g, (byte)b, hsl);
   uint16_t hue = (uint16_t)(hsl[0] * 65535);
 
-  String body = String("{\"on\": ") + (on ? "true" : "false") +
-                ", \"hue\": " + String(hue) + ", \"bri\": " + String(bri) +
-                ", \"sat\": " + String(sat) + "}";
+  String body = String("{")                            //
+                + "\"on\": " + (on ? "true" : "false") //
+                + ", \"hue\": " + String(hue)          //
+                + ", \"bri\": " + String(bri)          //
+                + ", \"sat\": " + String(sat)          //
+                + ", \"effect\": \"none\""             //
+                + "}";
+  if (DEBUG) {
+    Serial.println("R" + String(r) + " G" + String(g) + " B" + String(b) +
+                   " S" + String(sat) + " B" + String(bri));
+    Serial.println(body);
+  }
 
-  Serial.println("R" + String(r) + " G" + String(g) + " B" + String(b) + " S" +
-                 String(sat) + " B" + String(bri));
   sendBody(body, light, hueBridge, hueApiKey);
 }
