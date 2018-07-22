@@ -29,18 +29,13 @@ void setup() {
   Serial.println("Connected to WIFI");
 }
 
+uint8_t stepSize = 1;
 uint8_t diff = 0;
 bool up = true;
 
-uint8_t smallDiff = 0;
-bool smallUp = true;
-
 void loop(void) {
-  smallDiff = smallUp ? smallDiff + 1 : smallDiff - 1;
-  smallUp = (diff == 20 || diff == 0) ? !smallUp : smallUp;
-
-  diff = up ? diff + 1 : diff - 1;
-  up = (diff == 255 || diff == 0) ? !up : up;
+  diff = up ? diff + stepSize : diff - stepSize;
+  up = (diff >= 255 || diff == 0) ? !up : up;
 
   // enable led when sending
   digitalWrite(D4, LOW);
@@ -48,7 +43,7 @@ void loop(void) {
   // hue pulse
   sendHSB(true,
           255 * diff,                   //
-          195 + ((smallDiff % 20) * 3), //
+          200, //
           0.8 * 255, HUE_LIGHT,         //
           HUE_BRIDGE, HUE_API_KEY);
 
